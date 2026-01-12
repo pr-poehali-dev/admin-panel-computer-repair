@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { DataTable } from '@/components/DataTable';
+import { DataExport } from '@/components/DataExport';
+import { ReportGenerator } from '@/components/ReportGenerator';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
@@ -45,9 +47,21 @@ export default function Warehouse() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold">Склад</h2>
-        <p className="text-muted-foreground mt-1">Управление складскими запасами</p>
+      <div className="flex justify-between items-center w-full">
+        <div>
+          <h2 className="text-3xl font-bold">Склад</h2>
+          <p className="text-muted-foreground mt-1">Управление складскими запасами</p>
+        </div>
+        <div className="flex gap-2">
+          <DataExport data={items} columns={columns} filename="warehouse" />
+          <ReportGenerator
+            config={{
+              title: 'Складской отчёт',
+              data: items,
+              columns: [...columns, { key: 'quantity', label: 'Количество', aggregation: 'sum' }],
+            }}
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ReportGenerator } from '@/components/ReportGenerator';
 import { LineChart, Line, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Icon from '@/components/ui/icon';
 
@@ -46,6 +47,26 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-bold">Панель управления</h2>
+          <p className="text-muted-foreground mt-1">Общая статистика сервисного центра</p>
+        </div>
+        <ReportGenerator
+          config={{
+            title: 'Общий отчёт',
+            data: recentOrders,
+            columns: [
+              { key: 'id', label: 'Номер' },
+              { key: 'client', label: 'Клиент' },
+              { key: 'device', label: 'Устройство' },
+              { key: 'status', label: 'Статус' },
+              { key: 'priority', label: 'Приоритет' },
+            ],
+          }}
+        />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {stats.map((stat) => (
           <Card key={stat.label} className="hover:shadow-lg transition-shadow">

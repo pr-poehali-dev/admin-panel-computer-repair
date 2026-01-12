@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ReportGenerator } from '@/components/ReportGenerator';
 import { LineChart, Line, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Icon from '@/components/ui/icon';
 
@@ -39,9 +40,22 @@ export default function Finances() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold">Финансы</h2>
-        <p className="text-muted-foreground mt-1">Финансовая аналитика и отчётность</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-bold">Финансы</h2>
+          <p className="text-muted-foreground mt-1">Финансовая аналитика и отчётность</p>
+        </div>
+        <ReportGenerator
+          config={{
+            title: 'Финансовый отчёт',
+            data: incomeData,
+            columns: [
+              { key: 'month', label: 'Месяц' },
+              { key: 'income', label: 'Доход', aggregation: 'sum' },
+              { key: 'expenses', label: 'Расходы', aggregation: 'sum' },
+            ],
+          }}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { DataTable } from '@/components/DataTable';
 import { EntityForm } from '@/components/EntityForm';
+import { PageActions } from '@/components/PageActions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import Icon from '@/components/ui/icon';
 import { Column, FormField } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 
@@ -167,10 +166,16 @@ export default function Services() {
           <h2 className="text-3xl font-bold">Услуги</h2>
           <p className="text-muted-foreground mt-1">Каталог услуг сервисного центра</p>
         </div>
-        <Button onClick={handleCreate}>
-          <Icon name="Plus" size={16} />
-          Новая услуга
-        </Button>
+        <PageActions
+          data={services}
+          columns={columns}
+          filename="services"
+          reportTitle="Отчёт по услугам"
+          onImport={(imported) => setServices([...services, ...imported.map((s, i) => ({ ...s, id: String(services.length + i + 1) }))])}
+          onCreate={handleCreate}
+          createLabel="Новая услуга"
+          aggregations={[{ key: 'price', label: 'Цена', aggregation: 'avg' }]}
+        />
       </div>
 
       <DataTable

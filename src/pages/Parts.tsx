@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { DataTable } from '@/components/DataTable';
 import { EntityForm } from '@/components/EntityForm';
+import { PageActions } from '@/components/PageActions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import Icon from '@/components/ui/icon';
 import { Column, FormField } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 
@@ -175,10 +174,16 @@ export default function Parts() {
           <h2 className="text-3xl font-bold">Запчасти</h2>
           <p className="text-muted-foreground mt-1">Управление запчастями и комплектующими</p>
         </div>
-        <Button onClick={handleCreate}>
-          <Icon name="Plus" size={16} />
-          Новая запчасть
-        </Button>
+        <PageActions
+          data={parts}
+          columns={columns}
+          filename="parts"
+          reportTitle="Отчёт по запчастям"
+          onImport={(imported) => setParts([...parts, ...imported.map((p, i) => ({ ...p, id: String(parts.length + i + 1) }))])}
+          onCreate={handleCreate}
+          createLabel="Новая запчасть"
+          aggregations={[{ key: 'price', label: 'Стоимость', aggregation: 'sum' }]}
+        />
       </div>
 
       <DataTable

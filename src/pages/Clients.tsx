@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { DataTable } from '@/components/DataTable';
 import { EntityForm } from '@/components/EntityForm';
+import { PageActions } from '@/components/PageActions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import Icon from '@/components/ui/icon';
 import { Column, FormField } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 
@@ -178,6 +177,16 @@ export default function Clients() {
     setDialogOpen(false);
   };
 
+  const handleImport = (importedClients: Client[]) => {
+    const newClients = importedClients.map((client, index) => ({
+      ...client,
+      id: String(clients.length + index + 1),
+      totalOrders: client.totalOrders || 0,
+      totalSpent: client.totalSpent || 0,
+    }));
+    setClients([...clients, ...newClients]);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -185,10 +194,16 @@ export default function Clients() {
           <h2 className="text-3xl font-bold">Клиенты</h2>
           <p className="text-muted-foreground mt-1">База клиентов сервисного центра</p>
         </div>
-        <Button onClick={handleCreate}>
-          <Icon name="Plus" size={16} />
-          Новый клиент
-        </Button>
+        <PageActions
+          data={clients}
+          columns={columns}
+          filename="clients"
+          reportTitle="Отчёт по клиентам"
+          onImport={handleImport}
+          onCreate={handleCreate}
+          createLabel="Новый клиент"
+          aggregations={[{ key: 'totalSpent', label: 'Потрачено', aggregation: 'sum' }]}
+        />
       </div>
 
       <DataTable

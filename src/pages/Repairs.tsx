@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { DataTable } from '@/components/DataTable';
+import { DataExport } from '@/components/DataExport';
+import { ReportGenerator } from '@/components/ReportGenerator';
 import { Badge } from '@/components/ui/badge';
 import { Column } from '@/types';
 
@@ -75,9 +77,21 @@ export default function Repairs() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold">Ремонты</h2>
-        <p className="text-muted-foreground mt-1">Текущие ремонтные работы</p>
+      <div className="flex justify-between items-center w-full">
+        <div>
+          <h2 className="text-3xl font-bold">Ремонты</h2>
+          <p className="text-muted-foreground mt-1">Текущие ремонтные работы</p>
+        </div>
+        <div className="flex gap-2">
+          <DataExport data={repairs} columns={columns} filename="repairs" />
+          <ReportGenerator
+            config={{
+              title: 'Отчёт по ремонтам',
+              data: repairs,
+              columns,
+            }}
+          />
+        </div>
       </div>
 
       <DataTable

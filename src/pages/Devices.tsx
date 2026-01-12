@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { DataTable } from '@/components/DataTable';
 import { EntityForm } from '@/components/EntityForm';
+import { PageActions } from '@/components/PageActions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import Icon from '@/components/ui/icon';
 import { Column, FormField } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 
@@ -173,10 +172,15 @@ export default function Devices() {
           <h2 className="text-3xl font-bold">Устройства</h2>
           <p className="text-muted-foreground mt-1">Каталог устройств в обслуживании</p>
         </div>
-        <Button onClick={handleCreate}>
-          <Icon name="Plus" size={16} />
-          Новое устройство
-        </Button>
+        <PageActions
+          data={devices}
+          columns={columns}
+          filename="devices"
+          reportTitle="Отчёт по устройствам"
+          onImport={(imported) => setDevices([...devices, ...imported.map((d, i) => ({ ...d, id: String(devices.length + i + 1) }))])}
+          onCreate={handleCreate}
+          createLabel="Новое устройство"
+        />
       </div>
 
       <DataTable

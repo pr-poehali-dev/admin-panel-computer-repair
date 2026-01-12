@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { DataTable } from '@/components/DataTable';
 import { EntityForm } from '@/components/EntityForm';
+import { PageActions } from '@/components/PageActions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import Icon from '@/components/ui/icon';
 import { Column, FormField } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 
@@ -168,10 +167,16 @@ export default function Staff() {
           <h2 className="text-3xl font-bold">Сотрудники</h2>
           <p className="text-muted-foreground mt-1">Управление персоналом</p>
         </div>
-        <Button onClick={handleCreate}>
-          <Icon name="Plus" size={16} />
-          Новый сотрудник
-        </Button>
+        <PageActions
+          data={staff}
+          columns={columns}
+          filename="staff"
+          reportTitle="Отчёт по сотрудникам"
+          onImport={(imported) => setStaff([...staff, ...imported.map((s, i) => ({ ...s, id: String(staff.length + i + 1) }))])}
+          onCreate={handleCreate}
+          createLabel="Новый сотрудник"
+          aggregations={[{ key: 'salary', label: 'Зарплата', aggregation: 'sum' }]}
+        />
       </div>
 
       <DataTable

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ReportGenerator } from '@/components/ReportGenerator';
 import { LineChart, Line, BarChart, Bar, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import Icon from '@/components/ui/icon';
 
@@ -30,9 +31,23 @@ export default function Analytics() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h2 className="text-3xl font-bold">Аналитика</h2>
-        <p className="text-muted-foreground mt-1">Детальный анализ работы сервисного центра</p>
+      <div className="flex justify-between items-center">
+        <div>
+          <h2 className="text-3xl font-bold">Аналитика</h2>
+          <p className="text-muted-foreground mt-1">Детальный анализ работы сервисного центра</p>
+        </div>
+        <ReportGenerator
+          config={{
+            title: 'Аналитический отчёт',
+            data: performanceData,
+            columns: [
+              { key: 'month', label: 'Месяц' },
+              { key: 'orders', label: 'Заказы', aggregation: 'sum' },
+              { key: 'satisfaction', label: 'Оценка', aggregation: 'avg' },
+              { key: 'avgRepairTime', label: 'Время ремонта', aggregation: 'avg' },
+            ],
+          }}
+        />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

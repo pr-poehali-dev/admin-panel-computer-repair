@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import { DataTable } from '@/components/DataTable';
 import { EntityForm } from '@/components/EntityForm';
+import { PageActions } from '@/components/PageActions';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import Icon from '@/components/ui/icon';
 import { Column, FormField } from '@/types';
 import { useToast } from '@/hooks/use-toast';
 
@@ -183,6 +182,15 @@ export default function Orders() {
     setDialogOpen(false);
   };
 
+  const handleImport = (importedOrders: Order[]) => {
+    const newOrders = importedOrders.map((order, index) => ({
+      ...order,
+      id: String(orders.length + index + 1),
+      number: order.number || `#${1024 + orders.length + index}`,
+    }));
+    setOrders([...orders, ...newOrders]);
+  };
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -190,10 +198,16 @@ export default function Orders() {
           <h2 className="text-3xl font-bold">Заказы</h2>
           <p className="text-muted-foreground mt-1">Управление заказами на ремонт</p>
         </div>
-        <Button onClick={handleCreate}>
-          <Icon name="Plus" size={16} />
-          Новый заказ
-        </Button>
+        <PageActions
+          data={orders}
+          columns={columns}
+          filename="orders"
+          reportTitle="Отчёт по заказам"
+          onImport={handleImport}
+          onCreate={handleCreate}
+          createLabel="Новый заказ"
+          aggregations={[{ key: 'cost', label: 'Стоимость', aggregation: 'sum' }]}
+        />
       </div>
 
       <DataTable
